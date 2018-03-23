@@ -3,6 +3,6 @@
 return [
         
         '/' => 'StartController@index',
-        '/about|id|' => 'StartController@about'
+        '/about' => 'StartController@about'
 
 ];
