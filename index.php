@@ -2,12 +2,14 @@
 
 //defines
 
+$db = null;
 define('ROOT', getcwd());
 define('FRAMEWORK', ROOT . "/framework");
 define('CORE', ROOT . "/framework/core");
 define('CONFIG', ROOT . "/config");
 define('DEBUG', ROOT . "/debug");
 define('APP', ROOT . "/app");
+define('DB', ROOT . "/db");
 
 //var's requires
 $config = require(CONFIG . "/web.config.php");
@@ -45,8 +47,25 @@ if($app->app === false){
 $controller_name = $app->app[0];
 $method = $app->app[1];
 
+if($config['db']['activate'] == true){
+        require(DB . "/db.php");
+        $db = new db\db($config['db']);
+        require(APP . "/model.php");
+        app\Model::setDBvar($db);
+        $models = glob(APP . '/models/*.php');
+        foreach ($models as $model) {
+                require $model;
+        }
+}
+
+
+
 require(APP . "/controllers/" . $controller_name . ".php");
 
 $controller = core\factoryRoutes::route($controller_name);
 
 $controller->$method();
+
+if($config['db']['activate'] == true){
+        $db->close($db->link);
+}

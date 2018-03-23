@@ -1,10 +1,13 @@
 <?php
 
-class Post
+namespace app\models;
+
+use app\Model;
+
+class Post extends Model
 {
 
-        public function get(){
-
-        }
+        protected static
+                $table = "posts";
 
 }
